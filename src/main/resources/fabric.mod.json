@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "anarchia_autofinder",
+  "version": "${version}",
+  "name": "Anarchia AutoFinder",
+  "description": "Wykrywa widoczne Elytry/netheritową zbroję i wysyła /tpa do wykrytych graczy.",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "pl.autofinder.AnarchiaAutoFinderClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.1",
+    "minecraft": "1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
