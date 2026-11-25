@@ -1,33 +1,38 @@
-plugins {
-    id 'fabric-loom' version '1.14-SNAPSHOT'
-    id 'maven-publish'
-}
 
-version = project.mod_version
-group = project.maven_group
+name: Build Anarchia AutoFinder
 
-base {
-    archivesName = project.archives_base_name
-}
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
 
-repositories {
-    mavenCentral()
-}
+permissions:
+  contents: read
 
-dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-}
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-processResources {
-    inputs.property "version", project.version
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
-}
+    steps:
+      - uses: actions/checkout@v4
 
-tasks.withType(JavaCompile).configureEach {
-    options.release = 21
-}
+      - name: Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.14.3"
+
+      - name: Build
+        run: gradle build
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: AnarchiaAutoFinder
+          path: build/libs/*.jar
+
